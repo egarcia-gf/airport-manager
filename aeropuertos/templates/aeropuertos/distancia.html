@@ -1,0 +1,47 @@
+{% extends 'aeropuertos/base.html' %}
+{% block content %}
+<h1 class="text-3xl font-bold text-blue-800 mb-2">Calcular Distancia</h1>
+<p class="text-gray-500 font-medium mb-6">Ingresa dos códigos IATA para calcular la distancia entre aeropuertos.</p>
+
+<form method="POST" class="bg-white rounded-2xl shadow p-6 mb-8">
+    {% csrf_token %}
+    <div class="grid grid-cols-2 gap-6 mb-4">
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Aeropuerto Origen</label>
+            <input type="text" name="origen" placeholder="MEX"
+                class="border rounded-lg px-4 py-2 w-full uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Aeropuerto Destino</label>
+            <input type="text" name="destino" placeholder="KJFK"
+                class="border rounded-lg px-4 py-2 w-full uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+    </div>
+    <button class="bg-blue-700 text-white px-8 py-2 rounded-lg hover:bg-blue-800 transition font-semibold">
+        Calcular
+    </button>
+</form>
+
+{% if error %}
+    <div class="bg-red-100 text-red-700 rounded-xl px-6 py-4 mb-6 font-medium">⚠️ {{ error }}</div>
+{% endif %}
+
+{% if resultado %}
+<div class="bg-white rounded-2xl shadow p-8 text-center">
+    <p class="text-gray-500 font-medium mb-1">Distancia entre</p>
+    <p class="font-bold text-xl text-blue-800">{{ resultado.attributes.from_airport.name }}</p>
+    <p class="text-gray-400 text-2xl my-2">↕</p>
+    <p class="font-bold text-xl text-blue-800">{{ resultado.attributes.to_airport.name }}</p>
+    <div class="mt-6 grid grid-cols-2 gap-4">
+        <div class="bg-blue-50 rounded-xl p-4">
+            <p class="text-4xl font-bold text-blue-700">{{ resultado.attributes.kilometers|floatformat:0 }}</p>
+            <p class="text-gray-500 font-medium mt-1">Kilómetros</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4">
+            <p class="text-4xl font-bold text-slate-600">{{ resultado.attributes.miles|floatformat:0 }}</p>
+            <p class="text-gray-500 font-medium mt-1">Millas</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

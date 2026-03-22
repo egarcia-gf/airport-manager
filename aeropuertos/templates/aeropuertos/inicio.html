@@ -1,0 +1,45 @@
+{% extends 'aeropuertos/base.html' %}
+{% block content %}
+<h1 class="text-3xl font-bold text-blue-800 mb-2">Buscar Aeropuerto</h1>
+<p class="text-gray-500 font-medium mb-6">Ingresa el código IATA de un aeropuerto para ver su información.</p>
+
+<form method="POST" class="bg-white rounded-2xl shadow p-6 mb-8">
+    {% csrf_token %}
+    <label class="block text-gray-700 font-medium mb-2">Código IATA (ej: MEX, KJFK, LEMD)</label>
+    <div class="flex gap-3">
+        <input type="text" name="codigo" maxlength="6" placeholder="MEX"
+            class="border rounded-lg px-4 py-2 w-full uppercase tracking-widest text-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button class="bg-blue-700 text-white px-8 py-2 rounded-lg hover:bg-blue-800 transition font-semibold">
+            Buscar
+        </button>
+    </div>
+</form>
+
+{% if error %}
+    <div class="bg-red-100 text-red-700 rounded-xl px-6 py-4 mb-6 font-medium">⚠️ {{ error }}</div>
+{% endif %}
+
+{% if aeropuerto %}
+<div class="bg-white rounded-2xl shadow p-6">
+    <h2 class="text-2xl font-bold text-blue-800 mb-1">{{ aeropuerto.attributes.name }}</h2>
+    <p class="text-gray-500 font-medium mb-4">{{ aeropuerto.attributes.city }}, {{ aeropuerto.attributes.country }}</p>
+    <div class="grid grid-cols-2 gap-4 text-sm text-gray-700 mb-6">
+        <p>🛫 <span class="font-semibold">IATA:</span> {{ aeropuerto.attributes.iata }}</p>
+        <p>✈️ <span class="font-semibold">ICAO:</span> {{ aeropuerto.id }}</p>
+        <p>📍 <span class="font-semibold">Latitud:</span> {{ aeropuerto.attributes.latitude }}</p>
+        <p>📍 <span class="font-semibold">Longitud:</span> {{ aeropuerto.attributes.longitude }}</p>
+        <p>🏔️ <span class="font-semibold">Altitud:</span> {{ aeropuerto.attributes.altitude }} ft</p>
+        <p>🕐 <span class="font-semibold">Zona horaria:</span> {{ aeropuerto.attributes.timezone }}</p>
+    </div>
+    <form method="POST" action="/favoritos/agregar/">
+        {% csrf_token %}
+        <input type="hidden" name="airport_id" value="{{ aeropuerto.id }}">
+        <input type="text" name="nota" placeholder="Agrega una nota personal (opcional)"
+            class="border rounded-lg px-4 py-2 w-full mb-3 focus:outline-none focus:ring-2 focus:ring-green-400 font-medium">
+        <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition font-semibold">
+            ⭐ Agregar a Favoritos
+        </button>
+    </form>
+</div>
+{% endif %}
+{% endblock %}

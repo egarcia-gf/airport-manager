@@ -1,0 +1,64 @@
+{% extends 'aeropuertos/base.html' %}
+{% block content %}
+<h1 class="text-3xl font-bold text-blue-800 mb-2">Comparar Aeropuertos</h1>
+<p class="text-gray-500 font-medium mb-6">Compara lado a lado la información de dos aeropuertos.</p>
+
+<form method="POST" class="bg-white rounded-2xl shadow p-6 mb-8">
+    {% csrf_token %}
+    <div class="grid grid-cols-2 gap-6 mb-4">
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Aeropuerto 1</label>
+            <input type="text" name="codigo1" placeholder="MEX"
+                class="border rounded-lg px-4 py-2 w-full uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+        <div>
+            <label class="block text-gray-700 font-medium mb-2">Aeropuerto 2</label>
+            <input type="text" name="codigo2" placeholder="KJFK"
+                class="border rounded-lg px-4 py-2 w-full uppercase tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-400">
+        </div>
+    </div>
+    <button class="bg-blue-700 text-white px-8 py-2 rounded-lg hover:bg-blue-800 transition font-semibold">
+        Comparar
+    </button>
+</form>
+
+{% if error %}
+    <div class="bg-red-100 text-red-700 rounded-xl px-6 py-4 mb-6 font-medium">⚠️ {{ error }}</div>
+{% endif %}
+
+{% if aeropuerto1 and aeropuerto2 %}
+<div class="grid grid-cols-2 gap-6">
+    <!-- Aeropuerto 1 -->
+    <div class="bg-white rounded-2xl shadow p-6 border-t-4 border-blue-600">
+        <p class="text-xs font-bold text-blue-600 uppercase tracking-widest mb-2">Aeropuerto 1</p>
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{{ aeropuerto1.attributes.name }}</h2>
+        <div class="space-y-2 text-sm text-gray-700">
+            <p>🌍 <span class="font-semibold">Ciudad:</span> {{ aeropuerto1.attributes.city }}</p>
+            <p>🏳️ <span class="font-semibold">País:</span> {{ aeropuerto1.attributes.country }}</p>
+            <p>🛫 <span class="font-semibold">IATA:</span> {{ aeropuerto1.attributes.iata }}</p>
+            <p>✈️ <span class="font-semibold">ICAO:</span> {{ aeropuerto1.id }}</p>
+            <p>📍 <span class="font-semibold">Latitud:</span> {{ aeropuerto1.attributes.latitude }}</p>
+            <p>📍 <span class="font-semibold">Longitud:</span> {{ aeropuerto1.attributes.longitude }}</p>
+            <p>🏔️ <span class="font-semibold">Altitud:</span> {{ aeropuerto1.attributes.altitude }} ft</p>
+            <p>🕐 <span class="font-semibold">Zona horaria:</span> {{ aeropuerto1.attributes.timezone }}</p>
+        </div>
+    </div>
+
+    <!-- Aeropuerto 2 -->
+    <div class="bg-white rounded-2xl shadow p-6 border-t-4 border-green-600">
+        <p class="text-xs font-bold text-green-600 uppercase tracking-widest mb-2">Aeropuerto 2</p>
+        <h2 class="text-xl font-bold text-gray-800 mb-4">{{ aeropuerto2.attributes.name }}</h2>
+        <div class="space-y-2 text-sm text-gray-700">
+            <p>🌍 <span class="font-semibold">Ciudad:</span> {{ aeropuerto2.attributes.city }}</p>
+            <p>🏳️ <span class="font-semibold">País:</span> {{ aeropuerto2.attributes.country }}</p>
+            <p>🛫 <span class="font-semibold">IATA:</span> {{ aeropuerto2.attributes.iata }}</p>
+            <p>✈️ <span class="font-semibold">ICAO:</span> {{ aeropuerto2.id }}</p>
+            <p>📍 <span class="font-semibold">Latitud:</span> {{ aeropuerto2.attributes.latitude }}</p>
+            <p>📍 <span class="font-semibold">Longitud:</span> {{ aeropuerto2.attributes.longitude }}</p>
+            <p>🏔️ <span class="font-semibold">Altitud:</span> {{ aeropuerto2.attributes.altitude }} ft</p>
+            <p>🕐 <span class="font-semibold">Zona horaria:</span> {{ aeropuerto2.attributes.timezone }}</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
