@@ -1,0 +1,71 @@
+{% extends 'aeropuertos/base.html' %}
+{% block content %}
+<h1 class="text-3xl font-bold text-blue-800 mb-2">Buscar por País</h1>
+<p class="text-gray-500 font-medium mb-6">Ingresa el nombre de un país para ver sus aeropuertos.</p>
+
+<form method="POST" class="bg-white rounded-2xl shadow p-6 mb-8">
+    {% csrf_token %}
+    <label class="block text-gray-700 font-medium mb-2">País (ej: México, Estados Unidos, España)</label>
+    <div class="flex gap-3">
+        <input type="text" name="pais" placeholder="México"
+            class="border rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <button class="bg-blue-700 text-white px-8 py-2 rounded-lg hover:bg-blue-800 transition font-semibold">
+            Buscar
+        </button>
+    </div>
+</form>
+
+{% if error %}
+    <div class="bg-red-100 text-red-700 rounded-xl px-6 py-4 mb-6 font-medium">⚠️ {{ error }}</div>
+{% endif %}
+
+{% if aeropuertos %}
+<h2 class="text-xl font-bold text-blue-800 mb-4">
+    Aeropuertos en {{ pais }} — Página {{ pagina_actual }} de {{ total_paginas }} ({{ total }} total)
+</h2>
+<div class="grid gap-4">
+    {% for aeropuerto in aeropuertos %}
+    <div class="bg-white rounded-2xl shadow p-5">
+        <div class="flex justify-between items-start">
+            <div>
+                <p class="font-bold text-lg text-blue-800">{{ aeropuerto.attributes.name }}</p>
+                <p class="text-gray-500 text-sm">{{ aeropuerto.attributes.city }}, {{ aeropuerto.attributes.country }}</p>
+                <p class="text-gray-400 text-xs mt-1">IATA: {{ aeropuerto.attributes.iata }} | ICAO: {{ aeropuerto.id }}</p>
+            </div>
+            <a href="https://www.google.com/maps?q={{ aeropuerto.attributes.latitude }},{{ aeropuerto.attributes.longitude }}"
+                target="_blank"
+                class="bg-blue-100 text-blue-700 px-4 py-2 rounded-lg hover:bg-blue-200 transition text-sm font-semibold">
+                🗺️ Ver en Mapa
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if total_paginas > 1 %}
+<div class="flex justify-center gap-2 mt-8">
+    {% if pagina_actual > 1 %}
+        <a href="?pagina={{ pagina_actual|add:'-1' }}"
+            class="bg-white px-4 py-2 rounded-lg shadow font-medium text-blue-700 hover:bg-blue-50 transition">
+            ← Anterior
+        </a>
+    {% endif %}
+
+    <span class="bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+        {{ pagina_actual }}
+    </span>
+
+    {% if pagina_actual < total_paginas %}
+        <a href="?pagina={{ pagina_actual|add:'1' }}"
+            class="bg-white px-4 py-2 rounded-lg shadow font-medium text-blue-700 hover:bg-blue-50 transition">
+            Siguiente →
+        </a>
+    {% endif %}
+</div>
+<p class="text-center text-gray-500 font-medium mt-4">
+    Página {{ pagina_actual }} de {{ total_paginas }} — {{ total }} aeropuertos encontrados
+</p>
+{% endif %}
+
+{% endif %}
+{% endblock %}
