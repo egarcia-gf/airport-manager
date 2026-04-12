@@ -1,21 +1,18 @@
 from .base import *
+import os
 
 DEBUG = False
 
+ALLOWED_HOSTS = ['.onrender.com', 'localhost']
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-ALLOWED_HOSTS = ['airportmanager.com', 'www.airportmanager.com']
 
 # Seguridad para producción
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
-SECURE_SSL_REDIRECT = True
+CSRF_TRUSTED_ORIGINS = ['https://*.onrender.com']

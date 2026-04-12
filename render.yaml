@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: airport-manager
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn airport_manager.wsgi:application
+    envVars:
+      - key: AIRPORT_GAP_TOKEN
+        sync: false
+      - key: DJANGO_ENV
+        value: produccion
+      - key: DJANGO_SETTINGS_MODULE
+        value: airport_manager.settings
